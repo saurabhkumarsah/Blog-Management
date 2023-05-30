@@ -19,7 +19,7 @@ const authorSchema = new Schema(
         email: {
             type: String,
             require: true,
-            unique: ture
+            unique: true
         },
         password: {
             type: String,
