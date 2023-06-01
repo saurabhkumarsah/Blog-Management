@@ -1,8 +1,8 @@
 import mongoose from "mongoose"
 const { Schema, model } = mongoose
-const ObjectId = mongoose.SchemaType.ObjectId
+const ObjectId = mongoose.Schema.Types.ObjectId
 
-const blogSchema =new Schema(
+const blogSchema = new Schema(
     {
         title: {
             type: String,
@@ -13,8 +13,8 @@ const blogSchema =new Schema(
             require: true
         },
         authorId: {
-            type: ObjectId,
-            refs: "AuthorModel",
+            type: String,
+            ref: "AuthorModel",
             require: true
         },
         tags: ["String"],
@@ -32,8 +32,9 @@ const blogSchema =new Schema(
             default: false
         },
         publishedAt: Date,
-        deleteAt: Date
-    }
+        deletedAt: Date
+    },
+    { timestamps: true }
 )
 
 export default model("Blog", blogSchema)
