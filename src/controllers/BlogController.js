@@ -57,22 +57,19 @@ export const createBlog = async (req, res) => {
 //  *                                               Get Blog Function Start                                                    *
 //  * -------------------------------------------------------------------------------------------------------------------------*
 
-export const getBlog = async (req,res) => {
-    const data = await blogModel.find({isPublished: true, isDeleted: false})
-    res.status(200).send({status: true, data: data})
+export const getBlog = async (req, res) => {
+    try {
+
+        const filter = req.query
+
+        const data = await blogModel.find({$and: [filter,{ isPublished: true, isDeleted: false }]})
+        if (data.length === 0) return res.status(404).send({ status: false, message: "Blog not found" })
+        res.status(200).send({ status: true, data: data })
+    } catch (error) {
+        res.status(500).send({ status: false, message: error.message })
+    }
 }
 
 //  * -------------------------------------------------------------------------------------------------------------------------*
 //  *                                               Get Blog Function End                                                      *
 //  * -------------------------------------------------------------------------------------------------------------------------*
-
-
-// GET / blogs
-// Returns all blogs in the collection that aren't deleted and are published
-// Return the HTTP status 200 if any documents are found.The response structure should be like this
-// If no documents are found then return an HTTP status 404 with a response like this
-// Filter blogs list by applying filters.Query param can have any combination of below filters.
-// By author Id
-// By category
-// List of blogs that have a specific tag
-// List of blogs that have a specific subcategory example of a query url: blogs ? filtername = filtervalue & f2=fv2

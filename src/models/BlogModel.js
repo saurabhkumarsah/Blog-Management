@@ -13,7 +13,7 @@ const blogSchema = new Schema(
             require: true
         },
         authorId: {
-            type: String,
+            type: ObjectId,
             ref: "AuthorModel",
             require: true
         },
