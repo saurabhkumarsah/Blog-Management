@@ -4,9 +4,13 @@ const lower = (str) => {
  return str.toLowerCase()
 }
 
+//  * -------------------------------------------------------------------------------------------------------------------------*
+//  *                                              Create Author Function Start                                                *
+//  * -------------------------------------------------------------------------------------------------------------------------*
+
 export const createAuthor = async (req, res) => {
     try {
-
+        
         const data = req.body
         data.email = lower(data.email)
         let { fname, lname, title, email, password } = data
@@ -25,14 +29,26 @@ export const createAuthor = async (req, res) => {
         if (!password) return res.status(400).send({ status: false, messsage: "Please, Provide password" })
         const saveData = await authorModel.create(data)
         res.status(201).send({ status: true, data: saveData })
-
+        
     } catch (error) {
-
+        
         console.log("Error from authorController/createAuthor", error.message)
         res.status(500).send({ status: false, messsage: error.message })
-
+        
     }
 }
+//  * -------------------------------------------------------------------------------------------------------------------------*
+//  *                                              Create Author Function End                                                  *
+//  * -------------------------------------------------------------------------------------------------------------------------*
+
+
+//  * -------------------------------------------------------------------------------------------------------------------------*
+//  *                                              Author Login Function Start                                                 *
+//  * -------------------------------------------------------------------------------------------------------------------------*
+
+//  * -------------------------------------------------------------------------------------------------------------------------*
+//  *                                              Author Login Function End                                                   *
+//  * -------------------------------------------------------------------------------------------------------------------------*
 
 
 
