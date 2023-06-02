@@ -69,24 +69,22 @@ export const getBlog = async (req, res) => {
         res.status(500).send({ status: false, message: error.message })
     }
 }
-/*
-     * -------------------------------------------------------------------------------------------------------------------------*
- *                                                  Get Blog Function End                                                           *
-     * -------------------------------------------------------------------------------------------------------------------------*
-*/
 
-/*
-     * -------------------------------------------------------------------------------------------------------------------------*
- *                                                  Update Blog Function Start                                                      *
-     * -------------------------------------------------------------------------------------------------------------------------*
-*/
+// * -------------------------------------------------------------------------------------------------------------------------*
+// *                                                Get Blog Function End                                                     *
+// * -------------------------------------------------------------------------------------------------------------------------*
+
+
+// * -------------------------------------------------------------------------------------------------------------------------*
+// *                                              Update Blog Function Start                                                  *
+// * -------------------------------------------------------------------------------------------------------------------------*
 
 export const updateBlog = async (req, res) => {
     try {
         const blogId = req.params.blogId.trim()
         if (blogId.length !== 24 || blogId == undefined) return res.status(404).send({ status: false, message: "Blog ID is not valid" })
         const data = await blogModel.findOne({ _id: blogId, isDeleted: false })
-        if (!data) res.status(404).send({ status: false, message: "Blog is not exist" })
+        if (!data) return res.status(404).send({ status: false, message: "Blog is not exist" })
 
         let { title, body, authorId, tags, category, subcategory, isPublished, publishedAt, isDeleted } = req.body
         let filter = { title, body, tags, category, subcategory, isPublished, publishedAt }
@@ -107,7 +105,7 @@ export const updateBlog = async (req, res) => {
             } else {
                 return res.status(404).send({ status: false, message: "Blog is already published" })
             }
-        } 
+        }
         else {
             if (isPublished) {
                 filter.isPublished = isPublished
@@ -125,18 +123,42 @@ export const updateBlog = async (req, res) => {
     }
 }
 
-/*
-     * -------------------------------------------------------------------------------------------------------------------------*
- *                                                  Update Blog Function End                                                        *
-     * -------------------------------------------------------------------------------------------------------------------------*
-*/
+// * -------------------------------------------------------------------------------------------------------------------------*
+// *                                                  Update Blog Function End                                                *
+// * -------------------------------------------------------------------------------------------------------------------------*
+
+
+// * -------------------------------------------------------------------------------------------------------------------------*
+// *                                                  Delete Blog By Id Function Start                                        *
+// * -------------------------------------------------------------------------------------------------------------------------*
+
+export const deleteBlogById = async (req, res) => {
+    try {
+        const blogId = req.params.blogId.trim()
+        if (blogId.length !== 24 || blogId == undefined) return res.status(404).send({ status: false, message: "Blog ID is not valid" })
+        const data = await blogModel.findOne({ _id: blogId, isDeleted: false })
+        if (!data) return res.status(404).send({ status: false, message: "Blog is not exist" })
+        const date = moment().format();
+
+        await blogModel.findByIdAndUpdate({ _id: blogId }, { isDeleted: true, deletedAt: date })
+        return res.status(200).end()
+
+    } catch (error) {
+        return res.status(500).send({ status: false, message: error.message })
+    }
+}
+
+// * -------------------------------------------------------------------------------------------------------------------------*
+// *                                                  Delete Blog By Id Function End                                          *
+// * -------------------------------------------------------------------------------------------------------------------------*
 
 
 
+// * -------------------------------------------------------------------------------------------------------------------------*
+// *                                                  Delete Blog By Id Function End                                          *
+// * -------------------------------------------------------------------------------------------------------------------------*
+// * -------------------------------------------------------------------------------------------------------------------------*
+// *                                                  Delete Blog By Id Function End                                          *
+// * -------------------------------------------------------------------------------------------------------------------------*
 
-// PUT / blogs /: blogId
-// Updates a blog by changing the its title, body, adding tags, adding a subcategory. (Assuming tag and subcategory received in body is need to be added)
-// Updates a blog by changing its publish status i.e.adds publishedAt date and set published to true
-// Check if the blogId exists(must have isDeleted false).If it doesn't, return an HTTP status 404 with a response body like this
-// Return an HTTP status 200 if updated successfully with a body like this
-// Also make sure in the response you return the updated blog document.
+
