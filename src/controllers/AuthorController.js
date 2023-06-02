@@ -1,8 +1,12 @@
 import authorModel from '../models/AuthorModel.js'
 import isValidEmail from 'email-validator'
 const lower = (str) => {
- return str.toLowerCase()
+    return str.toLowerCase()
 }
+
+//  * -------------------------------------------------------------------------------------------------------------------------*
+//  *                                              Create Author Function Start                                                *
+//  * -------------------------------------------------------------------------------------------------------------------------*
 
 export const createAuthor = async (req, res) => {
     try {
@@ -17,7 +21,7 @@ export const createAuthor = async (req, res) => {
 
         if (!email) return res.status(400).send({ status: false, messsage: "Please, Provide email Id" })
         if (!isValidEmail.validate(email)) return res.status(400).send({ status: false, messsage: "Please, Provide valid email Id" })
-        
+
         const emailId = await authorModel.find({ email: email })
         // console.log(emailId);
         if (emailId.length === 1) return res.status(400).send({ status: false, messsage: "Email Id is already exits" })
@@ -33,6 +37,18 @@ export const createAuthor = async (req, res) => {
 
     }
 }
+//  * -------------------------------------------------------------------------------------------------------------------------*
+//  *                                              Create Author Function End                                                  *
+//  * -------------------------------------------------------------------------------------------------------------------------*
+
+
+//  * -------------------------------------------------------------------------------------------------------------------------*
+//  *                                              Author Login Function Start                                                 *
+//  * -------------------------------------------------------------------------------------------------------------------------*
+
+//  * -------------------------------------------------------------------------------------------------------------------------*
+//  *                                              Author Login Function End                                                   *
+//  * -------------------------------------------------------------------------------------------------------------------------*
 
 
 

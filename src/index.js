@@ -17,7 +17,7 @@ app.use('/', authorRouter)
 app.use('/', blogRouter)
 
 try {
-    
+
     app.listen(PORT, () => {
         console.log("Server start on PORT: ", PORT)
     })
@@ -26,5 +26,5 @@ try {
     console.log("MongoDB is Connected...")
 
 } catch (error) {
-    console.log("Internal error from index.js",error)
+    console.log("Internal error from index.js", error)
 }
