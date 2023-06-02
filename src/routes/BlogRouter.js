@@ -1,5 +1,5 @@
 import express from "express"
-import { createBlog, getBlog } from "../controllers/BlogController.js"
+import { createBlog, getBlog, updateBlog } from "../controllers/BlogController.js"
 
  const router = express.Router()
 
@@ -9,5 +9,6 @@ router.get('/test1', (req,res) => {
 
 router.post('/blog', createBlog)
 router.get('/blog', getBlog)
+router.put('/blog/:blogId', updateBlog)
 
 export default router;
