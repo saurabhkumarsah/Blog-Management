@@ -48,7 +48,7 @@ export const createBlog = async (req, res) => {
 }
 
 //  * -------------------------------------------------------------------------------------------------------------------------*
-//  *                                              Create Blog Function End                                                    *
+//  *                                               Create Blog Function End                                                    *
 //  * -------------------------------------------------------------------------------------------------------------------------*
 
 
@@ -76,7 +76,7 @@ export const getBlog = async (req, res) => {
 
 
 // * -------------------------------------------------------------------------------------------------------------------------*
-// *                                              Update Blog Function Start                                                  *
+// *                                                Update Blog Function Start                                                  *
 // * -------------------------------------------------------------------------------------------------------------------------*
 
 export const updateBlog = async (req, res) => {
@@ -155,10 +155,23 @@ export const deleteBlogById = async (req, res) => {
 
 
 // * -------------------------------------------------------------------------------------------------------------------------*
-// *                                                  Delete Blog By Id Function End                                          *
-// * -------------------------------------------------------------------------------------------------------------------------*
-// * -------------------------------------------------------------------------------------------------------------------------*
-// *                                                  Delete Blog By Id Function End                                          *
+// *                                                  Delete Blog By Condition Function Start                                         *
 // * -------------------------------------------------------------------------------------------------------------------------*
 
+export const blogDeleteByCondition = async (req, res) => {
+    try {
+        const condition = req.query
+        const date = moment().format()
+        const data = await blogModel.updateMany({ $and: [condition, { isDeleted: false }] }, { isDeleted: true, deletedAt: date })
+        console.log(data);
+        if (data.matchedCount === 0) return res.status(404).send({ status: false, message: "Blog not exist" })
+        // res.status(200).send({ status: true, data: data })
+        if (data.modifiedCount !== 0) return res.status(200).end()
+    } catch (error) {
+        return res.status(500).send({ status: false, message: error.message })
+    }
+}
 
+// * -------------------------------------------------------------------------------------------------------------------------*
+// *                                                  Delete Blog By Condition Function End                                          *
+// * -------------------------------------------------------------------------------------------------------------------------*
