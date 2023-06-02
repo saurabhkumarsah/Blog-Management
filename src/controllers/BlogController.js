@@ -84,36 +84,42 @@ export const getBlog = async (req, res) => {
 export const updateBlog = async (req, res) => {
     try {
         const blogId = req.params.blogId.trim()
-        console.log(blogId);
-        if (blogId.length !== 24 || blogId == undefined) res.status(404).send({ status: false, message: "Blog ID is not valid" })
+        if (blogId.length !== 24 || blogId == undefined) return res.status(404).send({ status: false, message: "Blog ID is not valid" })
         const data = await blogModel.findOne({ _id: blogId, isDeleted: false })
         if (!data) res.status(404).send({ status: false, message: "Blog is not exist" })
 
-        let { title, body, tags, subcategory, isPublished, publishedAt } = req.body
+        let { title, body, authorId, tags, category, subcategory, isPublished, publishedAt, isDeleted } = req.body
         let filter = { title, body, tags, category, subcategory, isPublished, publishedAt }
 
-        if (title) { filter.title = title.trim() }
-        if (body) { filter.body = body.trim() }
+        // if (isDeleted !== undefined) return res.status(404).send({ status: false, message: "You have not permission to delete blog here" })
+        if (Object.keys(req.body).length === 0) return res.status(404).send({ status: false, message: "Data not provided for updating the Blog" })
+        if (title) { filter.title = title.toString().trim() }
+        if (body) { filter.body = body.toString().trim() }
+        if (authorId) return res.status(404).send({ status: false, message: "You can't change the author ID" })
         if (tags) { filter.tags = data.tags.concat(tags) }
-        if (category) { filter.category = category }
+        if (category) { filter.category = category.toString().trim() }
         if (subcategory) { filter.subcategory = data.subcategory.concat(subcategory) }
-        if (isPublished) { filter.isPublished = body.trim() }
 
+        if (data.isPublished) {
+            if (!isPublished) {
+                filter.isPublished = isPublished
+                filter.publishedAt = null  //------------------------------------------------------------
+            } else {
+                return res.status(404).send({ status: false, message: "Blog is already published" })
+            }
+        } 
+        else {
+            if (isPublished) {
+                filter.isPublished = isPublished
+                filter.publishedAt = moment().format()
+            } else {
+                return res.status(404).send({ status: false, message: "Blog is already unpublished" })
+            }
+        }
 
+        const saveData = await blogModel.findOneAndUpdate({ _id: blogId }, filter, { new: true })
+        return res.status(200).send({ status: true, data: saveData })
 
-
-        // let reqData = req.body
-        // let {title, body, tags, subcategory, idPublished, publishedAt, isDeleted, deletedAt} = reqData
-        // const data = await blogModel.findOne({ _id: blogId, isDeleted: false })
-        // if(tags) {
-        //     tags = data.tags.concat(tags)
-        // }
-        // const dataUpdate = await blogModel.findOneAndUpdate({ _id: blogId, isDeleted: false },reqData,{new: true})
-
-
-        // // console.log(data);
-        // res.status(200).send({status: true, data: data})
-        res.end()
     } catch (error) {
         res.status(500).send({ status: false, message: error.message })
     }
