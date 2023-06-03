@@ -1,5 +1,5 @@
 import express from 'express'
-import { createAuthor } from '../controllers/authorController.js'
+import { authorLogin, createAuthor } from '../controllers/authorController.js'
 
 const router = express.Router()
 
@@ -8,5 +8,7 @@ router.get('/test', (req,res) => {
 })
 
 router.post('/author', createAuthor)
+
+router.post('/login', authorLogin)
 
 export default router;
