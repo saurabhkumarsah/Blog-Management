@@ -12,6 +12,7 @@ import blogRouter from "./routes/BlogRouter.js"
 
 
 app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 
 app.use('/', authorRouter)
 app.use('/', blogRouter)

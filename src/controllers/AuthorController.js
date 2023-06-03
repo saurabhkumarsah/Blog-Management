@@ -39,12 +39,12 @@ export const createAuthor = async (req, res) => {
 
         if (!password) return res.status(400).send({ status: false, messsage: "Please, Provide password" })
         const saveData = await authorModel.create(data)
-        res.status(201).send({ status: true, data: saveData })
+        return res.status(201).send({ status: true, data: saveData })
 
     } catch (error) {
 
-        console.log("Error from authorController/createAuthor", error.message)
-        res.status(500).send({ status: false, messsage: error.message })
+        // console.log("Error from authorController/createAuthor", error.message)
+        return res.status(500).send({ status: false, messsage: error.message })
 
     }
 }
@@ -68,16 +68,15 @@ export const authorLogin = async (req, res) => {
 
         if (!email) return res.status(400).send({ status: false, messsage: "Please, Provide email Id" })
         if (!isValidEmail.validate(email)) return res.status(400).send({ status: false, messsage: "Please, Provide valid email Id" })
-
         if (!password) return res.status(400).send({ status: false, messsage: "Please, Provide Password" })
 
         const data = await authorModel.findOne(req.body)
+        if (!data) return res.status(401).send({ status: false, messsage: "Credentials are not matched" })
 
-        if (!data) return res.status(404).send({ status: false, messsage: "Credentials are not matched" })
+        const dataId = data._id.toString()
+        const token = jwt.sign({ _id: dataId }, JWT_SECRET)
 
-        const token = jwt.sign({ _id: data._id }, JWT_SECRET)
-
-        res.status(201).send({ status: true, data: { token: token } })
+        return res.status(201).send({ status: true, data: { token: token } })
 
     } catch (error) {
         return res.status(500).send({ status: false, messsage: error.message })

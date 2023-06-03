@@ -7,7 +7,7 @@ router.get('/test', (req,res) => {
     res.send({status: true, message: "👍"})
 })
 
-router.post('/author', createAuthor)
+router.post('/authors', createAuthor)
 
 router.post('/login', authorLogin)
 
