@@ -16,12 +16,12 @@ export const createAuthor = async (req, res) => {
     try {
 
         const data = req.body
-        data.email = lower(data.email)
-        data.fname = removeSpaces(data.fname)
-        data.lname = removeSpaces(data.lname)
-        data.title = removeSpaces(data.title)
-        data.email = removeSpaces(data.email)
-        data.password = removeSpaces(data.password)
+        // data.email = lower(data.email)
+        // data.fname = removeSpaces(data.fname)
+        // data.lname = removeSpaces(data.lname)
+        // data.title = removeSpaces(data.title)
+        // data.email = removeSpaces(data.email)
+        // data.password = removeSpaces(data.password)
 
         let { fname, lname, title, email, password } = data
 
@@ -61,8 +61,8 @@ export const authorLogin = async (req, res) => {
     try {
 
         const { JWT_SECRET } = process.env
-        req.body.email = removeSpaces(req.body.email)
-        req.body.password = removeSpaces(req.body.password)
+        // req.body.email = removeSpaces(req.body.email)
+        // req.body.password = removeSpaces(req.body.password)
 
         let { email, password } = req.body
 

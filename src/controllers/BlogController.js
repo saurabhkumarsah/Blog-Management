@@ -11,10 +11,10 @@ export const createBlog = async (req, res) => {
     try {
 
         let data = req.body
-        data.title = data.title.trim()
-        data.body = data.body.trim()
-        data.authorId = data.authorId.trim()
-        data.category = data.category.trim()
+        // data.title = data.title.trim()
+        // data.body = data.body.trim()
+        // data.authorId = data.authorId.trim()
+        // data.category = data.category.trim()
         let { title, body, authorId, category, isPublished, isDeleted } = data
 
         if (!title) return res.status(400).send({ status: false, message: "Please, Provide  title" })
